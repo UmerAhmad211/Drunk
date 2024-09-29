@@ -3,8 +3,7 @@ CXX = clang++
 SRC_DIR = src
 LIB_DIR = lib
 
-# List all source files
-SRC = $(SRC_DIR)/main.cpp $(LIB_DIR)/init.cpp $(LIB_DIR)/tableau.cpp
+SRC = $(SRC_DIR)/main.cpp $(LIB_DIR)/init.cpp $(LIB_DIR)/tableau.cpp $(LIB_DIR)/stock.cpp
 
 TARGET = game
 
