@@ -13,10 +13,10 @@ init::~init() {}
 void init::load_textures() {
   const int T_WIDTH = 127;
   const int T_HEIGHT = 172;
-  std::string card_base[] = {"assets/clubs", "assets/spades", "assets/hearts",
-                             "assets/diam"};
-  const char* card_values[] = {"1", "2", "3",  "4",  "5",  "6", "7",
-                               "8", "9", "10", "11", "12", "13"};
+  std::string card_base[] = {"assets/hearts", "assets/diam", "assets/clubs",
+                             "assets/spades"};
+  const std::string card_values[] = {"1", "2", "3",  "4",  "5",  "6", "7",
+                                     "8", "9", "10", "11", "12", "13"};
 
   for (size_t i = 0; i < CARDS_NO; ++i) {
     size_t suit = i / 13;
