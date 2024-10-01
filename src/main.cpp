@@ -4,12 +4,11 @@
 #include "../lib/stock.hpp"
 #include "../lib/tableau.hpp"
 #include "raylib.h"
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
 
 int main() {
-  const int screenWidth = 1280;
-  const int screenHeight = 720;
-
-  InitWindow(screenWidth, screenHeight, "Solitaire");
+  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Solitaire");
 
   init card_l;
 
@@ -38,18 +37,19 @@ int main() {
     ClearBackground(RAYWHITE);
 
     if (on_title) {
-      DrawTexture(texture, screenWidth / 2 - texture.width / 2,
-                  screenHeight / 2 - texture.height / 2, WHITE);
+      DrawTexture(texture, SCREEN_WIDTH / 2 - texture.width / 2,
+                  SCREEN_HEIGHT / 2 - texture.height / 2, WHITE);
       DrawText("Solitaire", 100, 300, 100, WHITE);
       DrawText("Press enter to continue.", 540, 640, 20, WHITE);
     } else {
-      DrawTexture(green_back, screenWidth / 2 - green_back.width / 2,
-                  screenHeight / 2 - texture.height / 2, WHITE);
+      DrawTexture(green_back, SCREEN_WIDTH / 2 - green_back.width / 2,
+                  SCREEN_HEIGHT / 2 - texture.height / 2, WHITE);
       n_tab.draw_tableau();
       n_stock.draw_stock();
     }
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
       Vector2 mouse_pos = GetMousePosition();
+      n_stock.stock_clicked(mouse_pos);
       std::cout << "Mouse pos: " << "X: " << mouse_pos.x << "Y: " << mouse_pos.y
                 << std::endl;
     }
