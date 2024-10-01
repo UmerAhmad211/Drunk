@@ -2,6 +2,8 @@
 #define LIB_HPP
 #include "raylib.h"
 #define CARDS_NO 52
+#define T_WIDTH 127
+#define T_HEIGHT 172
 
 struct cards_props {
   Texture2D cards;
