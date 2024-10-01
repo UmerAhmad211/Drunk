@@ -11,8 +11,6 @@ init::init() {
 init::~init() {}
 // clean code
 void init::load_textures() {
-  const int T_WIDTH = 127;
-  const int T_HEIGHT = 172;
   std::string card_base[] = {"assets/hearts", "assets/diam", "assets/clubs",
                              "assets/spades"};
   const std::string card_values[] = {"1", "2", "3",  "4",  "5",  "6", "7",
