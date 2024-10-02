@@ -1,6 +1,7 @@
 #include "stock.hpp"
 #include <raylib.h>
 #include <iostream>
+
 #define CORD_X 64
 #define CORD_Y 29
 #define S_SIZE 23
@@ -12,8 +13,9 @@ stock::stock(init* cards_inst) : init_cards(cards_inst) {
     std::cerr << "Empty." << std::endl;
   spacing = 150;
 }
-// delete
-stock::~stock() {}
+stock::~stock() {
+  delete init_cards;
+}
 
 void stock::draw_stock() {
   DrawTexture(init_cards->card_back, CORD_X, CORD_Y, WHITE);

@@ -9,12 +9,11 @@ init::init() {
   card_back = LoadTexture("assets/card_back.png");
 }
 init::~init() {}
-// clean code
 void init::load_textures() {
-  std::string card_base[] = {"assets/hearts", "assets/diam", "assets/clubs",
-                             "assets/spades"};
-  const std::string card_values[] = {"1", "2", "3",  "4",  "5",  "6", "7",
-                                     "8", "9", "10", "11", "12", "13"};
+  std::string card_base[] = {"assets/heart", "assets/diams", "assets/clubs",
+                             "assets/spade"};
+  const std::string card_values[] = {"01", "02", "03", "04", "05", "06", "07",
+                                     "08", "09", "10", "11", "12", "13"};
 
   for (size_t i = 0; i < CARDS_NO; ++i) {
     size_t suit = i / 13;
@@ -42,7 +41,7 @@ void init::shuffle_cards() {
 
 void init::init_cards_state() {
   for (size_t i = 24; i < CARDS_NO; ++i) {
-    if (i == 24 || i == 31 || i == 37 || i == 42 || i == 46 || i == 49 ||
+    if (i == 24 || i == 26 || i == 29 || i == 33 || i == 38 || i == 44 ||
         i == 51)
       deck[i].isnt_hidden = true;
   }
