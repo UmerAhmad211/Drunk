@@ -1,5 +1,7 @@
 #ifndef LIB_HPP
 #define LIB_HPP
+#include <iostream>
+#include <vector>
 #include "raylib.h"
 
 #define CARDS_NO 52
@@ -9,6 +11,10 @@
 struct cards_props {
   Texture2D cards;
   bool isnt_hidden;
+  Vector2 position;
+  std::string card_type;
+  int card_num;
+  bool is_captured;
 };
 class init {
  public:
