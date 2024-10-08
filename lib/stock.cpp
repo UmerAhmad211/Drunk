@@ -9,8 +9,7 @@
 stock::stock(init* cards_inst) : init_cards(cards_inst) {
   for (size_t i = 0; i <= S_SIZE; ++i)
     cards_stock.push(init_cards->deck[i]);
-  if (cards_stock.empty())
-    std::cerr << "Empty." << std::endl;
+
   spacing = 150;
 }
 stock::~stock() {
@@ -24,9 +23,11 @@ void stock::draw_stock() {
 }
 
 void stock::stock_clicked(Vector2 mouse_pos) {
-  if ((CheckCollisionPointRec(mouse_pos,
-                              (Rectangle){CORD_X, CORD_Y, T_WIDTH, T_HEIGHT})))
-    move_to_waste();
+  if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    if ((CheckCollisionPointRec(
+            mouse_pos, (Rectangle){CORD_X, CORD_Y, T_WIDTH, T_HEIGHT})))
+      move_to_waste();
+  }
 }
 
 void stock::move_to_waste() {
