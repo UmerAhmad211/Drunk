@@ -20,14 +20,12 @@ int main() {
   card_l.init_cards_state();
   stock n_stock(&card_l);
   tableau n_tab(&card_l);
-  fndtion n_fnd(&card_l);
+  fndtion n_fnd;
   n_tab.tableau_init();
   Texture2D texture = LoadTexture("assets/coz1.png");
   Texture2D green_back = LoadTexture("assets/boardsol.png");
   bool on_title = true;
   SetTargetFPS(60);
-
-  std::cout << "Current directory: " << GetWorkingDirectory() << std::endl;
 
   while (!WindowShouldClose()) {
     if (on_title) {
@@ -50,12 +48,11 @@ int main() {
       n_stock.draw_stock();
       n_fnd.draw_fnd();
     }
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-      Vector2 mouse_pos = GetMousePosition();
-      n_stock.stock_clicked(mouse_pos);
-      std::cout << "Mouse pos: " << "X: " << mouse_pos.x
-                << " Y: " << mouse_pos.y << std::endl;
-    }
+
+    Vector2 mouse_pos = GetMousePosition();
+    n_stock.stock_clicked(mouse_pos);
+    n_tab.tableau_move(mouse_pos);
+    n_tab.is_valid_move(n_fnd);
 
     EndDrawing();
   }
