@@ -11,15 +11,18 @@ stock::stock(init* cards_inst) : init_cards(cards_inst) {
     cards_stock.push(init_cards->deck[i]);
 
   spacing = 150;
+  loc_change = true;
+  dragging = false;
 }
 stock::~stock() {
-  delete init_cards;
+  init_cards = nullptr;
 }
 
 void stock::draw_stock() {
   DrawTexture(init_cards->card_back, CORD_X, CORD_Y, WHITE);
   if (!waste.empty())
-    DrawTexture(waste.top().cards, CORD_X + spacing, CORD_Y, WHITE);
+    DrawTexture(waste.top().cards, waste.top().position.x,
+                waste.top().position.y, WHITE);
 }
 
 void stock::stock_clicked(Vector2 mouse_pos) {
@@ -29,21 +32,87 @@ void stock::stock_clicked(Vector2 mouse_pos) {
       move_to_waste();
   }
 }
-
 void stock::move_to_waste() {
   if (!cards_stock.empty()) {
-    cards_stock.top().isnt_hidden = true;
-    waste.push(cards_stock.top());
+    auto top_card = cards_stock.top();
     cards_stock.pop();
+    top_card.isnt_hidden = true;
+    top_card.position.x = CORD_X + spacing;
+    top_card.position.y = CORD_Y;
+    waste.push(top_card);
   } else
     restock();
 }
 
 void stock::restock() {
   for (; !waste.empty();) {
-    waste.top().isnt_hidden = false;
-    cards_stock.push(waste.top());
+    auto top_card = waste.top();
     waste.pop();
+    top_card.isnt_hidden = false;
+    cards_stock.push(top_card);
   }
   draw_stock();
+}
+
+void stock::waste_moved(Vector2 mouse_pos) {
+  if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !waste.empty()) {
+    Rectangle card_rect = {waste.top().position.x, waste.top().position.y,
+                           static_cast<float>(waste.top().cards.width),
+                           static_cast<float>(waste.top().cards.height)};
+    if (CheckCollisionPointRec(mouse_pos, card_rect)) {
+      dragging = true;
+      offset.x = mouse_pos.x - waste.top().position.x;
+      offset.y = mouse_pos.y - waste.top().position.y;
+      if (loc_change) {
+        old_pos.x = waste.top().position.x;
+        old_pos.y = waste.top().position.y;
+        loc_change = false;
+      }
+      return;
+    }
+  } else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) &&
+             !waste.top().is_captured && dragging && !waste.empty()) {
+    auto top_card = deep_copy_card(waste.top());
+    waste.pop();
+    top_card.position.x = old_pos.x;
+    top_card.position.y = old_pos.y;
+    loc_change = true;
+    dragging = false;
+    waste.push(top_card);
+  }
+  if (dragging && !waste.empty()) {
+    Vector2 nmouse_pos = GetMousePosition();
+    auto top_card = deep_copy_card(waste.top());
+    waste.pop();
+    top_card.position.x = nmouse_pos.x - offset.x;
+    top_card.position.y = nmouse_pos.y - offset.y;
+    waste.push(top_card);
+  }
+}
+
+void stock::move_cards_frm_sw(fndtion& n_fnd) {
+  Vector2 nmouse_pos = GetMousePosition();
+  if (dragging) {
+    Rectangle card_rect = {waste.top().position.x, waste.top().position.y,
+                           static_cast<float>(waste.top().cards.width),
+                           static_cast<float>(waste.top().cards.height)};
+    Rectangle fnd_rect = set_rect(waste.top().card_type, n_fnd);
+    Rectangle intersect_rect = GetCollisionRec(card_rect, fnd_rect);
+    Rectangle cursor_box = {nmouse_pos.x - 3, nmouse_pos.y - 3, 3, 3};
+    float intersect_area = intersect_rect.width * intersect_rect.height;
+    float cursor_area = cursor_box.width * cursor_box.height;
+    bool validator = n_fnd.is_valid_move(waste.top());
+    if (intersect_area / cursor_area >= CAPT_THRES && validator) {
+      auto top_card = waste.top();
+      waste.pop();
+      top_card.position.x =
+          fnd_rect.x + (fnd_rect.width - top_card.cards.width) / 2;
+      top_card.position.y =
+          fnd_rect.y + (fnd_rect.height - top_card.cards.height) / 2;
+      top_card.is_captured = true;
+      n_fnd.update_fnd(top_card);
+      dragging = false;
+      loc_change = true;
+    }
+  }
 }
