@@ -7,15 +7,15 @@
 #include "raylib.h"
 
 #define COL_NUM 7
-#define CAPT_THRES 0.5f
 
 class tableau {
   init* cards;
   std::vector<cards_props> tableau_seven[COL_NUM];
-  bool is_first;
-  bool dragging = false;
+  std::vector<cards_props> selected_cards;
+  bool loc_change;
+  bool dragging;
   size_t i_x = 0, i_y = 0;
-  Vector2 offset = {0, 0};
+  Vector2 offset = {0, 0}, old_pos = {0, 0};
   Rectangle set_rect(std::string card_type, fndtion n_fnd) {
     if (card_type == "assets/heart")
       return n_fnd.fnd_rec1;
@@ -34,7 +34,9 @@ class tableau {
   void tableau_init();
   void update_tableau();
   void tableau_move(Vector2);
-  void is_valid_move(fndtion&);
+  void move_cards_frm_tab(fndtion&);
+  void move_cards_frm_tab_tab();
+  bool check_valid_tab(cards_props, cards_props);
 };
 
 #endif
