@@ -7,6 +7,7 @@
 #define FND_NO 4
 #define FND_X 630
 #define FND_Y 29
+#define CAPT_THRES 0.5f
 
 class fndtion {
   std::vector<cards_props> fnd_four[FND_NO];
@@ -20,6 +21,7 @@ class fndtion {
   ~fndtion();
   void draw_fnd();
   void update_fnd(cards_props);
+  bool is_valid_move(cards_props);
 };
 
 #endif

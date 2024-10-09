@@ -3,12 +3,7 @@
 #include <cstddef>
 
 fndtion::fndtion() {};
-fndtion::~fndtion() {
-  for (size_t i = 0; i < FND_NO; ++i) {
-    for (size_t j = 0; j < fnd_four[i].size(); ++j)
-      UnloadTexture(fnd_four[i][j].cards);
-  }
-}
+fndtion::~fndtion() {}
 
 void fndtion::draw_fnd() {
   for (size_t i = 0; i < FND_NO; ++i) {
@@ -27,6 +22,43 @@ void fndtion::update_fnd(cards_props cards) {
     fnd_four[1].push_back(cards);
   else if (cards.card_type == "assets/clubs")
     fnd_four[2].push_back(cards);
-  else
+  else if (cards.card_type == "assets/spade")
     fnd_four[3].push_back(cards);
+}
+
+bool fndtion::is_valid_move(cards_props card) {
+  if (card.card_type == "assets/heart") {
+    if (!fnd_four[0].empty()) {
+      if (card.card_num - fnd_four[0].back().card_num == 1)
+        return true;
+      return false;
+    } else if (card.card_num == 1)
+      return true;
+    return false;
+  } else if (card.card_type == "assets/diams") {
+    if (!fnd_four[1].empty()) {
+      if (card.card_num - fnd_four[1].back().card_num == 1)
+        return true;
+      return false;
+    } else if (card.card_num == 1)
+      return true;
+    return false;
+  } else if (card.card_type == "assets/clubs") {
+    if (!fnd_four[2].empty()) {
+      if (card.card_num - fnd_four[2].back().card_num == 1)
+        return true;
+      return false;
+    } else if (card.card_num == 1)
+      return true;
+    return false;
+  } else if (card.card_type == "assets/spade") {
+    if (!fnd_four[3].empty()) {
+      if (card.card_num - fnd_four[3].back().card_num == 1)
+        return true;
+      return false;
+    } else if (card.card_num == 1)
+      return true;
+    return false;
+  }
+  return false;
 }
