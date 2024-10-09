@@ -34,7 +34,7 @@ void stock::stock_clicked(Vector2 mouse_pos) {
 }
 void stock::move_to_waste() {
   if (!cards_stock.empty()) {
-    auto top_card = cards_stock.top();
+    auto top_card = deep_copy_card(cards_stock.top());
     cards_stock.pop();
     top_card.isnt_hidden = true;
     top_card.position.x = CORD_X + spacing;
@@ -46,7 +46,7 @@ void stock::move_to_waste() {
 
 void stock::restock() {
   for (; !waste.empty();) {
-    auto top_card = waste.top();
+    auto top_card = deep_copy_card(waste.top());
     waste.pop();
     top_card.isnt_hidden = false;
     cards_stock.push(top_card);
@@ -70,45 +70,42 @@ void stock::waste_moved(Vector2 mouse_pos) {
       }
       return;
     }
-  } else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) &&
-             !waste.top().is_captured && dragging && !waste.empty()) {
-    auto top_card = deep_copy_card(waste.top());
-    waste.pop();
-    top_card.position.x = old_pos.x;
-    top_card.position.y = old_pos.y;
-    loc_change = true;
-    dragging = false;
-    waste.push(top_card);
+  } else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && dragging &&
+             !waste.empty()) {
+    if (!waste.top().is_captured) {
+      auto top_card = deep_copy_card(waste.top());
+      waste.pop();
+      top_card.position.x = old_pos.x;
+      top_card.position.y = old_pos.y;
+      loc_change = true;
+      dragging = false;
+      waste.push(top_card);
+    }
   }
   if (dragging && !waste.empty()) {
-    Vector2 nmouse_pos = GetMousePosition();
-    auto top_card = deep_copy_card(waste.top());
-    waste.pop();
-    top_card.position.x = nmouse_pos.x - offset.x;
-    top_card.position.y = nmouse_pos.y - offset.y;
-    waste.push(top_card);
+    if (!waste.top().is_captured) {
+      Vector2 nmouse_pos = GetMousePosition();
+      auto top_card = deep_copy_card(waste.top());
+      waste.pop();
+      top_card.position.x = nmouse_pos.x - offset.x;
+      top_card.position.y = nmouse_pos.y - offset.y;
+      waste.push(top_card);
+    }
   }
 }
 
 void stock::move_cards_frm_sw(fndtion& n_fnd) {
-  Vector2 nmouse_pos = GetMousePosition();
   if (dragging) {
     Rectangle card_rect = {waste.top().position.x, waste.top().position.y,
                            static_cast<float>(waste.top().cards.width),
                            static_cast<float>(waste.top().cards.height)};
     Rectangle fnd_rect = set_rect(waste.top().card_type, n_fnd);
-    Rectangle intersect_rect = GetCollisionRec(card_rect, fnd_rect);
-    Rectangle cursor_box = {nmouse_pos.x - 3, nmouse_pos.y - 3, 3, 3};
-    float intersect_area = intersect_rect.width * intersect_rect.height;
-    float cursor_area = cursor_box.width * cursor_box.height;
     bool validator = n_fnd.is_valid_move(waste.top());
-    if (intersect_area / cursor_area >= CAPT_THRES && validator) {
-      auto top_card = waste.top();
+    if (CheckCollisionRecs(card_rect, fnd_rect) && validator) {
+      auto top_card = deep_copy_card(waste.top());
       waste.pop();
-      top_card.position.x =
-          fnd_rect.x + (fnd_rect.width - top_card.cards.width) / 2;
-      top_card.position.y =
-          fnd_rect.y + (fnd_rect.height - top_card.cards.height) / 2;
+      top_card.position.x = fnd_rect.x;
+      top_card.position.y = fnd_rect.y;
       top_card.is_captured = true;
       n_fnd.update_fnd(top_card);
       dragging = false;
