@@ -12,11 +12,13 @@ init::init() {
 init::~init() {}
 
 void init::load_textures() {
-  std::vector<std::string> card_base = {"assets/heart", "assets/diams",
-                                        "assets/clubs", "assets/spade"};
+  const std::vector<std::string> card_base = {"assets/heart", "assets/diams",
+                                              "assets/clubs", "assets/spade"};
   const std::vector<std::string> card_values = {"01", "02", "03", "04", "05",
                                                 "06", "07", "08", "09", "10",
                                                 "11", "12", "13"};
+  int j = 0;
+  const char card_clr[2] = {'r', 'b'};
   for (size_t i = 0; i < CARDS_NO; ++i) {
     size_t suit = i / 13;
     size_t value = i % 13;
@@ -25,8 +27,13 @@ void init::load_textures() {
     ImageResize(&img, T_WIDTH, T_HEIGHT);
     deck[i].cards = LoadTextureFromImage(img);
     deck[i].card_type = card_base[suit];
-    deck[i].card_num = value;
+    deck[i].card_num = value + 1;
     deck[i].is_captured = false;
+    deck[i].colour = card_clr[j];
+    if (i == 25)
+      ++j;
+
+    UnloadImage(img);
   }
 }
 
@@ -47,7 +54,6 @@ void init::init_cards_state() {
         i == 51)
       deck[i].isnt_hidden = true;
   }
-  // can be done in one loop
   int x = 150, spacing = 160, y = 258;
   for (size_t i = 24; i < CARDS_NO; ++i) {
     deck[i].position.x = x, deck[i].position.y = y;

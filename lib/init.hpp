@@ -15,6 +15,7 @@ struct cards_props {
   std::string card_type;
   int card_num;
   bool is_captured;
+  char colour;
 };
 class init {
  public:
