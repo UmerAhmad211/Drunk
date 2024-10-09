@@ -52,8 +52,10 @@ int main() {
     Vector2 mouse_pos = GetMousePosition();
     n_stock.stock_clicked(mouse_pos);
     n_tab.tableau_move(mouse_pos);
-    n_tab.is_valid_move(n_fnd);
-
+    n_tab.move_cards_frm_tab(n_fnd);
+    n_tab.move_cards_frm_tab_tab();
+    n_stock.waste_moved(mouse_pos);
+    n_stock.move_cards_frm_sw(n_fnd);
     EndDrawing();
   }
 
