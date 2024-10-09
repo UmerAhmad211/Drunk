@@ -26,6 +26,13 @@ class tableau {
     else
       return n_fnd.fnd_rec4;
   }
+  cards_props deep_copy_card(const cards_props& orig) {
+    cards_props copy = orig;
+    Image img = LoadImageFromTexture(orig.cards);
+    copy.cards = LoadTextureFromImage(img);
+    UnloadImage(img);
+    return copy;
+  }
 
  public:
   tableau(init*);

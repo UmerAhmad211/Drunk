@@ -79,25 +79,16 @@ void tableau::tableau_move(Vector2 mouse_pos) {
 }
 
 void tableau::move_cards_frm_tab(fndtion& n_fnd) {
-  Vector2 nmouse_pos = GetMousePosition();
   if (dragging) {
     Rectangle card_rect = {
         tableau_seven[i_x][i_y].position.x, tableau_seven[i_x][i_y].position.y,
         static_cast<float>(tableau_seven[i_x][i_y].cards.width),
         static_cast<float>(tableau_seven[i_x][i_y].cards.height)};
     Rectangle fnd_rect = set_rect(tableau_seven[i_x][i_y].card_type, n_fnd);
-    Rectangle intersect_rect = GetCollisionRec(card_rect, fnd_rect);
-    Rectangle cursor_box = {nmouse_pos.x - 3, nmouse_pos.y - 3, 3, 3};
-    float intersect_area = intersect_rect.width * intersect_rect.height;
-    float cursor_area = cursor_box.width * cursor_box.height;
     bool validator = n_fnd.is_valid_move(tableau_seven[i_x][i_y]);
-    if (intersect_area / cursor_area >= CAPT_THRES && validator) {
-      tableau_seven[i_x][i_y].position.x =
-          fnd_rect.x +
-          (fnd_rect.width - tableau_seven[i_x][i_y].cards.width) / 2;
-      tableau_seven[i_x][i_y].position.y =
-          fnd_rect.y +
-          (fnd_rect.height - tableau_seven[i_x][i_y].cards.height) / 2;
+    if (CheckCollisionRecs(card_rect, fnd_rect) && validator) {
+      tableau_seven[i_x][i_y].position.x = fnd_rect.x;
+      tableau_seven[i_x][i_y].position.y = fnd_rect.y;
       tableau_seven[i_x][i_y].is_captured = true;
       n_fnd.update_fnd(tableau_seven[i_x][i_y]);
       tableau_seven[i_x].pop_back();
@@ -134,7 +125,7 @@ void tableau::move_cards_frm_tab_tab() {
             !tableau_seven[i_x][i_y].is_captured &&
             tableau_seven[i][j].isnt_hidden &&
             tableau_seven[i_x][i_y].isnt_hidden) {
-          auto card = tableau_seven[i_x].back();
+          auto card = deep_copy_card(tableau_seven[i_x].back());
           tableau_seven[i_x].pop_back();
           card.position.y = tableau_seven[i][j].position.y;
           card.position.y += 27;
