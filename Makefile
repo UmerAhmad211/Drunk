@@ -3,7 +3,7 @@ CXX = clang++
 SRC_DIR = src
 LIB_DIR = lib
 
-SRC = $(SRC_DIR)/main.cpp $(LIB_DIR)/init.cpp $(LIB_DIR)/tableau.cpp $(LIB_DIR)/stock.cpp $(LIB_DIR)/fndtion.cpp
+SRC = $(SRC_DIR)/main.cpp $(LIB_DIR)/init.cpp $(LIB_DIR)/tableau.cpp $(LIB_DIR)/stock.cpp $(LIB_DIR)/fndtion.cpp $(LIB_DIR)/util.cpp
 
 TARGET = game
 
