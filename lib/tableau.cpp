@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstring>
 #include "init.hpp"
+#include "util.hpp"
 
 tableau::tableau(init* card_inst) : cards(card_inst) {
   loc_change = true;
@@ -21,6 +22,8 @@ void tableau::draw_tableau() {
       else
         DrawTexture(cards->card_back, tableau_seven[i][j].position.x,
                     tableau_seven[i][j].position.y, WHITE);
+      tableau_seven[i][j].is_top = false;
+      tableau_seven[i].back().is_top = true;
     }
   }
 }
@@ -39,16 +42,19 @@ void tableau::tableau_move(Vector2 mouse_pos) {
   if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
     for (size_t i = 0; i < COL_NUM; ++i) {
       for (size_t j = 0; j < tableau_seven[i].size(); ++j) {
+        float visi_height = (j == tableau_seven[i].size() - 1)
+                                ? static_cast<float>(T_HEIGHT)
+                                : 27.0f;
         Rectangle card_rect = {
             tableau_seven[i][j].position.x, tableau_seven[i][j].position.y,
-            static_cast<float>(tableau_seven[i][j].cards.width),
-            static_cast<float>(tableau_seven[i][j].cards.height)};
+            static_cast<float>(tableau_seven[i][j].cards.width), visi_height};
 
         if (CheckCollisionPointRec(mouse_pos, card_rect) &&
             tableau_seven[i][j].isnt_hidden) {
           dragging = true;
           i_x = i;
           i_y = j;
+          select_card_sequence(i_x, i_y);
           offset.x = mouse_pos.x - tableau_seven[i][j].position.x;
           offset.y = mouse_pos.y - tableau_seven[i][j].position.y;
 
@@ -62,8 +68,12 @@ void tableau::tableau_move(Vector2 mouse_pos) {
       }
     }
   } else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && dragging) {
-    tableau_seven[i_x][i_y].position.x = old_pos.x;
-    tableau_seven[i_x][i_y].position.y = old_pos.y;
+    int y = 0;
+    for (size_t i = 0; i < selected_cards.size(); ++i) {
+      tableau_seven[i_x][i_y + i].position.x = old_pos.x;
+      tableau_seven[i_x][i_y + i].position.y = old_pos.y + y;
+      y += 27;
+    }
     loc_change = true;
     dragging = false;
   }
@@ -72,8 +82,12 @@ void tableau::tableau_move(Vector2 mouse_pos) {
     if (i_x >= 0 && i_x < COL_NUM && i_y >= 0 &&
         i_y < tableau_seven[i_x].size()) {
       Vector2 nmouse_pos = GetMousePosition();
-      tableau_seven[i_x][i_y].position.x = nmouse_pos.x - offset.x;
-      tableau_seven[i_x][i_y].position.y = nmouse_pos.y - offset.y;
+      int y = 0;
+      for (size_t i = 0; i < selected_cards.size(); ++i) {
+        tableau_seven[i_x][i_y + i].position.x = nmouse_pos.x - offset.x;
+        tableau_seven[i_x][i_y + i].position.y = nmouse_pos.y - offset.y + y;
+        y += 27;
+      }
     }
   }
 }
@@ -95,6 +109,7 @@ void tableau::move_cards_frm_tab(fndtion& n_fnd) {
       dragging = false;
       if (!tableau_seven[i_x].empty())
         tableau_seven[i_x].back().isnt_hidden = true;
+
       loc_change = true;
     }
   }
@@ -124,20 +139,52 @@ void tableau::move_cards_frm_tab_tab() {
             CheckCollisionRecs(tab_rect, card_rect) &&
             !tableau_seven[i_x][i_y].is_captured &&
             tableau_seven[i][j].isnt_hidden &&
-            tableau_seven[i_x][i_y].isnt_hidden) {
-          auto card = deep_copy_card(tableau_seven[i_x].back());
-          tableau_seven[i_x].pop_back();
-          card.position.y = tableau_seven[i][j].position.y;
-          card.position.y += 27;
-          card.position.x = tableau_seven[i][j].position.x;
-          tableau_seven[i].push_back(card);
+            tableau_seven[i_x][i_y].isnt_hidden && tableau_seven[i][j].is_top) {
+          for (size_t k = 0; k < selected_cards.size(); ++k) {
+            auto card = deep_copy_card(tableau_seven[i_x][i_y + k]);
+            card.position.y = tableau_seven[i][j].position.y;
+            card.position.y += 27;
+            card.position.x = tableau_seven[i][j].position.x;
+            tableau_seven[i].push_back(card);
+          }
+          for (size_t k = 0; k < selected_cards.size(); ++k) {
+            tableau_seven[i_x].pop_back();
+            selected_cards.clear();
+          }
           dragging = false;
           if (!tableau_seven[i_x].empty())
             tableau_seven[i_x].back().isnt_hidden = true;
+
           loc_change = true;
           return;
         }
       }
     }
   }
+}
+
+bool tableau::card_moved_frm_waste(const cards_props card_w) {
+  Rectangle card_rect = {card_w.position.x, card_w.position.y,
+                         static_cast<float>(card_w.cards.width),
+                         static_cast<float>(card_w.cards.height)};
+
+  for (size_t i = 0; i < COL_NUM; ++i) {
+    for (size_t j = 0; j < tableau_seven[i].size(); ++j) {
+      Rectangle tab_rect = {
+          tableau_seven[i][j].position.x, tableau_seven[i][j].position.y,
+          static_cast<float>(tableau_seven[i][j].cards.width),
+          static_cast<float>(tableau_seven[i][j].cards.height)};
+      if (check_valid_tab(card_w, tableau_seven[i][j]) &&
+          CheckCollisionRecs(tab_rect, card_rect) && !card_w.is_captured &&
+          tableau_seven[i][j].isnt_hidden && tableau_seven[i][j].is_top &&
+          card_w.isnt_hidden) {
+        auto card = deep_copy_card(card_w);
+        card.position.y = tableau_seven[i][j].position.y + 27;
+        card.position.x = tableau_seven[i][j].position.x;
+        tableau_seven[i].push_back(card);
+        return true;
+      }
+    }
+  }
+  return false;
 }

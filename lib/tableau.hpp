@@ -26,12 +26,11 @@ class tableau {
     else
       return n_fnd.fnd_rec4;
   }
-  cards_props deep_copy_card(const cards_props& orig) {
-    cards_props copy = orig;
-    Image img = LoadImageFromTexture(orig.cards);
-    copy.cards = LoadTextureFromImage(img);
-    UnloadImage(img);
-    return copy;
+  void select_card_sequence(size_t col, size_t start_x) {
+    selected_cards.clear();
+    for (size_t i = start_x; i < tableau_seven[col].size(); ++i)
+      if (tableau_seven[col][i].isnt_hidden)
+        selected_cards.push_back(tableau_seven[col][i]);
   }
 
  public:
@@ -44,6 +43,7 @@ class tableau {
   void move_cards_frm_tab(fndtion&);
   void move_cards_frm_tab_tab();
   bool check_valid_tab(cards_props, cards_props);
+  bool card_moved_frm_waste(const cards_props);
 };
 
 #endif
