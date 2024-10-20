@@ -56,42 +56,21 @@ void stock::restock() {
 }
 
 void stock::waste_moved(Vector2 mouse_pos) {
-  if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !waste.empty()) {
-    Rectangle card_rect = {waste.top().position.x, waste.top().position.y,
-                           static_cast<float>(waste.top().cards.width),
-                           static_cast<float>(waste.top().cards.height)};
-    if (CheckCollisionPointRec(mouse_pos, card_rect)) {
-      dragging = true;
-      offset.x = mouse_pos.x - waste.top().position.x;
-      offset.y = mouse_pos.y - waste.top().position.y;
-      if (loc_change) {
-        old_pos.x = waste.top().position.x;
-        old_pos.y = waste.top().position.y;
-        loc_change = false;
-      }
-      return;
-    }
-  } else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && dragging &&
-             !waste.empty()) {
-    if (!waste.top().is_captured) {
-      auto top_card = deep_copy_card(waste.top());
-      waste.pop();
-      top_card.position.x = old_pos.x;
-      top_card.position.y = old_pos.y;
-      loc_change = true;
-      dragging = false;
-      waste.push(top_card);
-    }
+  if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !waste.empty())
+    collision_checker(mouse_pos, offset, old_pos, dragging, loc_change,
+                      waste.top());
+  else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && dragging &&
+           !waste.empty() && !waste.top().is_captured) {
+    cards_props top_card;
+    set_old_pos(old_pos, dragging, loc_change, waste.top(), top_card, 0);
+    waste.pop();
+    waste.push(top_card);
   }
-  if (dragging && !waste.empty()) {
-    if (!waste.top().is_captured) {
-      Vector2 nmouse_pos = GetMousePosition();
-      auto top_card = deep_copy_card(waste.top());
-      waste.pop();
-      top_card.position.x = nmouse_pos.x - offset.x;
-      top_card.position.y = nmouse_pos.y - offset.y;
-      waste.push(top_card);
-    }
+  if (dragging && !waste.empty() && !waste.top().is_captured) {
+    cards_props top_card;
+    update_pos(offset, waste.top(), top_card, 0);
+    waste.pop();
+    waste.push(top_card);
   }
 }
 

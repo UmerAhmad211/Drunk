@@ -14,16 +14,6 @@ class stock {
   bool loc_change;
   bool dragging;
   Vector2 offset = {0, 0}, old_pos = {0, 0};
-  Rectangle set_rect(std::string card_type, fndtion n_fnd) {
-    if (card_type == "assets/heart")
-      return n_fnd.fnd_rec1;
-    else if (card_type == "assets/diams")
-      return n_fnd.fnd_rec2;
-    else if (card_type == "assets/clubs")
-      return n_fnd.fnd_rec3;
-    else
-      return n_fnd.fnd_rec4;
-  }
 
  public:
   stock(init*);
