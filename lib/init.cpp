@@ -30,9 +30,9 @@ void init::load_textures() {
     deck[i].card_num = value + 1;
     deck[i].is_captured = false;
     deck[i].colour = card_clr[j];
+    deck[i].is_top = false;
     if (i == 25)
       ++j;
-
     UnloadImage(img);
   }
 }
@@ -53,6 +53,7 @@ void init::init_cards_state() {
     if (i == 24 || i == 26 || i == 29 || i == 33 || i == 38 || i == 44 ||
         i == 51)
       deck[i].isnt_hidden = true;
+    deck[i].is_top = true;
   }
   int x = 150, spacing = 160, y = 258;
   for (size_t i = 24; i < CARDS_NO; ++i) {
