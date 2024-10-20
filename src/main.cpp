@@ -1,5 +1,4 @@
 #include <sys/types.h>
-#include <iostream>
 #include "../lib/fndtion.hpp"
 #include "../lib/init.hpp"
 #include "../lib/stock.hpp"
@@ -56,6 +55,7 @@ int main() {
     n_tab.move_cards_frm_tab_tab();
     n_stock.waste_moved(mouse_pos);
     n_stock.move_cards_frm_sw(n_fnd);
+    n_stock.move_cards_frm_wt(n_tab);
     EndDrawing();
   }
 
