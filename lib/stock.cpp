@@ -1,6 +1,7 @@
 #include "stock.hpp"
 #include <raylib.h>
 #include <iostream>
+#include "util.hpp"
 
 #define CORD_X 64
 #define CORD_Y 29
@@ -108,6 +109,17 @@ void stock::move_cards_frm_sw(fndtion& n_fnd) {
       top_card.position.y = fnd_rect.y;
       top_card.is_captured = true;
       n_fnd.update_fnd(top_card);
+      dragging = false;
+      loc_change = true;
+    }
+  }
+}
+
+void stock::move_cards_frm_wt(tableau& n_tab) {
+  if (dragging) {
+    bool yay = n_tab.card_moved_frm_waste(waste.top());
+    if (yay) {
+      waste.pop();
       dragging = false;
       loc_change = true;
     }

@@ -4,6 +4,7 @@
 #include "fndtion.hpp"
 #include "init.hpp"
 #include "raylib.h"
+#include "tableau.hpp"
 
 class stock {
   init* init_cards;
@@ -23,13 +24,6 @@ class stock {
     else
       return n_fnd.fnd_rec4;
   }
-  cards_props deep_copy_card(const cards_props& orig) {
-    cards_props copy = orig;
-    Image img = LoadImageFromTexture(orig.cards);
-    copy.cards = LoadTextureFromImage(img);
-    UnloadImage(img);
-    return copy;
-  }
 
  public:
   stock(init*);
@@ -40,6 +34,7 @@ class stock {
   void stock_clicked(Vector2);
   void waste_moved(Vector2);
   void move_cards_frm_sw(fndtion&);
+  void move_cards_frm_wt(tableau&);
 };
 
 #endif
