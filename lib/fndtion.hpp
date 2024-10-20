@@ -22,6 +22,7 @@ class fndtion {
   void draw_fnd();
   void update_fnd(cards_props);
   bool is_valid_move(cards_props);
+  bool is_win();
 };
 
 #endif

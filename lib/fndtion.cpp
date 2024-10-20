@@ -27,38 +27,33 @@ void fndtion::update_fnd(cards_props cards) {
 }
 
 bool fndtion::is_valid_move(cards_props card) {
-  if (card.card_type == "assets/heart") {
-    if (!fnd_four[0].empty()) {
-      if (card.card_num - fnd_four[0].back().card_num == 1)
-        return true;
+  int suit_i;
+  switch (card.card_type[7]) {
+    case 'h':
+      suit_i = 0;
+      break;
+    case 'd':
+      suit_i = 1;
+      break;
+    case 'c':
+      suit_i = 2;
+      break;
+    case 's':
+      suit_i = 3;
+      break;
+    default:
       return false;
-    } else if (card.card_num == 1)
-      return true;
-    return false;
-  } else if (card.card_type == "assets/diams") {
-    if (!fnd_four[1].empty()) {
-      if (card.card_num - fnd_four[1].back().card_num == 1)
-        return true;
-      return false;
-    } else if (card.card_num == 1)
-      return true;
-    return false;
-  } else if (card.card_type == "assets/clubs") {
-    if (!fnd_four[2].empty()) {
-      if (card.card_num - fnd_four[2].back().card_num == 1)
-        return true;
-      return false;
-    } else if (card.card_num == 1)
-      return true;
-    return false;
-  } else if (card.card_type == "assets/spade") {
-    if (!fnd_four[3].empty()) {
-      if (card.card_num - fnd_four[3].back().card_num == 1)
-        return true;
-      return false;
-    } else if (card.card_num == 1)
-      return true;
-    return false;
   }
+
+  if (fnd_four[suit_i].empty()) {
+    return card.card_num == 1;
+  }
+  return card.card_num - fnd_four[suit_i].back().card_num == 1;
+}
+
+bool fndtion::is_win() {
+  if (fnd_four[0].back().card_num == 13 && fnd_four[1].back().card_num == 13 &&
+      fnd_four[2].back().card_num == 13 && fnd_four[3].back().card_num == 13)
+    return true;
   return false;
 }
