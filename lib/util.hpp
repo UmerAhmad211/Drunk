@@ -2,6 +2,7 @@
 #define UTIL_HPP
 
 #include <stack>
+#include <vector>
 #include "fndtion.hpp"
 #include "init.hpp"
 #include "raylib.h"

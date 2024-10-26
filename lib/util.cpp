@@ -30,7 +30,7 @@ bool collision_checker(const Vector2& mouse_pos,
   Rectangle card_rect = {card.position.x, card.position.y,
                          static_cast<float>(card.cards.width),
                          static_cast<float>(card.cards.height)};
-  if (CheckCollisionPointRec(mouse_pos, card_rect)) {
+  if (CheckCollisionPointRec(mouse_pos, card_rect) && card.isnt_hidden) {
     dragging = true;
     offset.x = mouse_pos.x - card.position.x;
     offset.y = mouse_pos.y - card.position.y;

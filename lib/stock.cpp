@@ -104,3 +104,14 @@ void stock::move_cards_frm_wt(tableau& n_tab) {
     }
   }
 }
+
+void stock::unload_textures() {
+  for (; !cards_stock.empty();) {
+    UnloadTexture(cards_stock.top().cards);
+    cards_stock.pop();
+  }
+  for (; !waste.empty();) {
+    UnloadTexture(waste.top().cards);
+    waste.pop();
+  }
+}

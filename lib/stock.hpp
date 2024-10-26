@@ -25,6 +25,7 @@ class stock {
   void waste_moved(Vector2);
   void move_cards_frm_sw(fndtion&);
   void move_cards_frm_wt(tableau&);
+  void unload_textures();
 };
 
 #endif
