@@ -23,7 +23,10 @@ int main() {
   n_tab.tableau_init();
   Texture2D texture = LoadTexture("assets/coz1.png");
   Texture2D green_back = LoadTexture("assets/boardsol.png");
+  Texture2D win_b = LoadTexture("assets/winb.png");
   bool on_title = true;
+  float elasp_time = 0;
+  int points = 0;
   SetTargetFPS(60);
 
   while (!WindowShouldClose()) {
@@ -42,13 +45,22 @@ int main() {
       DrawText("Press enter to continue.", 540, 640, 20, WHITE);
     } else {
       DrawTexture(green_back, SCREEN_WIDTH / 2 - green_back.width / 2,
-                  SCREEN_HEIGHT / 2 - texture.height / 2, WHITE);
+                  SCREEN_HEIGHT / 2 - green_back.height / 2, WHITE);
       n_tab.draw_tableau();
       n_stock.draw_stock();
       n_fnd.draw_fnd();
+      elasp_time += GetFrameTime();
+      DrawText(TextFormat("Time: %.0f seconds", elasp_time), 58, 600, 20,
+               WHITE);
+      DrawText("UNDO", 58, 630, 20, WHITE);
     }
-
+    if (n_fnd.is_win()) {
+      DrawTexture(win_b, SCREEN_WIDTH / 2 - win_b.width / 2,
+                  SCREEN_HEIGHT / 2 - win_b.height / 2, WHITE);
+    }
     Vector2 mouse_pos = GetMousePosition();
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+      std::cout << "X: " << mouse_pos.x << " Y: " << mouse_pos.y << std::endl;
     n_stock.stock_clicked(mouse_pos);
     n_tab.tableau_move(mouse_pos);
     n_tab.move_cards_frm_tab(n_fnd);
@@ -61,7 +73,10 @@ int main() {
 
   UnloadTexture(texture);
   UnloadTexture(green_back);
-  card_l.unload_textures();
+  UnloadTexture(win_b);
+  n_tab.unload_textures();
+  n_stock.unload_textures();
+  n_fnd.unload_textures();
 
   CloseWindow();
 
