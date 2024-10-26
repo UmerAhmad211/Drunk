@@ -25,7 +25,6 @@ class init {
   Texture2D card_back;
   cards_props deck[CARDS_NO]{};
   void load_textures();
-  void unload_textures();
   void shuffle_cards();
   void init_cards_state();
 };

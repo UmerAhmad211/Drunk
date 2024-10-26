@@ -62,9 +62,3 @@ void init::init_cards_state() {
     x += is_first_in_column * spacing;
   }
 }
-
-void init::unload_textures() {
-  for (size_t i = 0; i < CARDS_NO; ++i)
-    UnloadTexture(deck[i].cards);
-  UnloadTexture(card_back);
-}
