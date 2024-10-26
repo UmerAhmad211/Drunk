@@ -23,6 +23,7 @@ class fndtion {
   void update_fnd(cards_props);
   bool is_valid_move(cards_props);
   bool is_win();
+  void unload_textures();
 };
 
 #endif

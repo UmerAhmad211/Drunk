@@ -56,7 +56,17 @@ bool fndtion::is_valid_move(cards_props card) {
 }
 
 bool fndtion::is_win() {
-  return (
-      fnd_four[0].back().card_num == 13 && fnd_four[1].back().card_num == 13 &&
-      fnd_four[2].back().card_num == 13 && fnd_four[3].back().card_num == 13);
+  for (int i = 0; i < 4; ++i) {
+    if (fnd_four[i].empty() || fnd_four[i].back().card_num != 13) {
+      return false;
+    }
+  }
+  return true;
+}
+
+void fndtion::unload_textures() {
+  for (size_t i = 0; i < FND_NO; ++i) {
+    for (size_t j = 0; j < fnd_four[i].size(); ++j)
+      UnloadTexture(fnd_four[i][j].cards);
+  }
 }
