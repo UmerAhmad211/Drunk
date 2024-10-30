@@ -1,5 +1,5 @@
-#ifndef LIB_HPP
-#define LIB_HPP
+#ifndef INIT_HPP
+#define INIT_HPP
 #include <iostream>
 #include <vector>
 #include "raylib.h"
