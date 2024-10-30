@@ -14,6 +14,7 @@ stock::stock(init* cards_inst) : init_cards(cards_inst) {
   spacing = 150;
   loc_change = true;
   dragging = false;
+  click_s = LoadSound("assets/card_s.wav");
 }
 stock::~stock() {
   init_cards = nullptr;
@@ -26,14 +27,16 @@ void stock::draw_stock() {
                 waste.top().position.y, WHITE);
 }
 
-void stock::stock_clicked(Vector2 mouse_pos) {
+void stock::stock_clicked(Vector2 mouse_pos, int& points) {
   if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
     if ((CheckCollisionPointRec(
-            mouse_pos, (Rectangle){CORD_X, CORD_Y, T_WIDTH, T_HEIGHT})))
-      move_to_waste();
+            mouse_pos, (Rectangle){CORD_X, CORD_Y, T_WIDTH, T_HEIGHT}))) {
+      PlaySound(click_s);
+      move_to_waste(points);
+    }
   }
 }
-void stock::move_to_waste() {
+void stock::move_to_waste(int& points) {
   if (!cards_stock.empty()) {
     auto top_card = deep_copy_card(cards_stock.top());
     cards_stock.pop();
@@ -41,8 +44,10 @@ void stock::move_to_waste() {
     top_card.position.x = CORD_X + spacing;
     top_card.position.y = CORD_Y;
     waste.push(top_card);
-  } else
+  } else {
+    points -= 10;
     restock();
+  }
 }
 
 void stock::restock() {
@@ -74,7 +79,7 @@ void stock::waste_moved(Vector2 mouse_pos) {
   }
 }
 
-void stock::move_cards_frm_sw(fndtion& n_fnd) {
+void stock::move_cards_frm_sw(fndtion& n_fnd, int& points) {
   if (dragging) {
     Rectangle card_rect = {waste.top().position.x, waste.top().position.y,
                            static_cast<float>(waste.top().cards.width),
@@ -90,13 +95,15 @@ void stock::move_cards_frm_sw(fndtion& n_fnd) {
       n_fnd.update_fnd(top_card);
       dragging = false;
       loc_change = true;
+      PlaySound(click_s);
+      points += 10;
     }
   }
 }
 
-void stock::move_cards_frm_wt(tableau& n_tab) {
+void stock::move_cards_frm_wt(tableau& n_tab, int& points) {
   if (dragging) {
-    bool yay = n_tab.card_moved_frm_waste(waste.top());
+    bool yay = n_tab.card_moved_frm_waste(waste.top(), points);
     if (yay) {
       waste.pop();
       dragging = false;
@@ -114,4 +121,5 @@ void stock::unload_textures() {
     UnloadTexture(waste.top().cards);
     waste.pop();
   }
+  UnloadSound(click_s);
 }
