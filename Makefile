@@ -7,7 +7,7 @@ SRC = $(SRC_DIR)/main.cpp $(LIB_DIR)/init.cpp $(LIB_DIR)/tableau.cpp $(LIB_DIR)/
 
 TARGET = game
 
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2
+CXXFLAGS = -std=c++17 -Wall -Wextra -O3 -flto -march=native
 
 INCLUDE = -I/usr/local/include -I$(LIB_DIR)
 
