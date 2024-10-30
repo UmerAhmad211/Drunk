@@ -1,8 +1,8 @@
 #include <sys/types.h>
-#include "../lib/fndtion.hpp"
-#include "../lib/init.hpp"
-#include "../lib/stock.hpp"
-#include "../lib/tableau.hpp"
+#include "../include/fndtion.hpp"
+#include "../include/init.hpp"
+#include "../include/stock.hpp"
+#include "../include/tableau.hpp"
 #include "raylib.h"
 
 #define SCREEN_WIDTH 1280
