@@ -57,9 +57,8 @@ bool fndtion::is_valid_move(cards_props card) {
 
 bool fndtion::is_win() {
   for (int i = 0; i < 4; ++i) {
-    if (fnd_four[i].empty() || fnd_four[i].back().card_num != 13) {
+    if (fnd_four[i].empty() || fnd_four[i].back().card_num != 13)
       return false;
-    }
   }
   return true;
 }
