@@ -1,4 +1,4 @@
-#include "util.hpp"
+#include "../include/util.hpp"
 
 cards_props deep_copy_card(const cards_props& orig) {
   cards_props copy = orig;

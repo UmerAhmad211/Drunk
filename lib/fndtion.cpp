@@ -1,4 +1,4 @@
-#include "fndtion.hpp"
+#include "../include/fndtion.hpp"
 #include <raylib.h>
 #include <cstddef>
 

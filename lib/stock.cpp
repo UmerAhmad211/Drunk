@@ -1,7 +1,7 @@
-#include "stock.hpp"
+#include "../include/stock.hpp"
 #include <raylib.h>
 #include <iostream>
-#include "util.hpp"
+#include "../include/util.hpp"
 
 #define CORD_X 64
 #define CORD_Y 29

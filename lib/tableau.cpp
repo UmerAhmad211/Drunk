@@ -1,9 +1,9 @@
-#include "tableau.hpp"
+#include "../include/tableau.hpp"
 #include <raylib.h>
 #include <cstddef>
 #include <cstring>
-#include "init.hpp"
-#include "util.hpp"
+#include "../include/init.hpp"
+#include "../include/util.hpp"
 
 tableau::tableau(init* card_inst) : cards(card_inst) {
   loc_change = true;

@@ -1,4 +1,4 @@
-#include "init.hpp"
+#include "../include/init.hpp"
 #include <raylib.h>
 #include <cstddef>
 #include <cstdlib>
