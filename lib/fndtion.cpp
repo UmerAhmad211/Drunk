@@ -2,15 +2,14 @@
 #include <raylib.h>
 #include <cstddef>
 
-fndtion::fndtion() {};
-fndtion::~fndtion() {}
+fndtion::fndtion() = default;
+fndtion::~fndtion() = default;
 
 void fndtion::draw_fnd() {
   for (size_t i = 0; i < FND_NO; ++i) {
-    for (size_t j = 0; j < fnd_four[i].size(); ++j) {
-      if (fnd_four[i][j].isnt_hidden)
-        DrawTexture(fnd_four[i][j].cards, fnd_four[i][j].position.x,
-                    fnd_four[i][j].position.y, WHITE);
+    if (!fnd_four[i].empty()) {
+      DrawTexture(fnd_four[i].back().cards, fnd_four[i].back().position.x,
+                  fnd_four[i].back().position.y, WHITE);
     }
   }
 }
