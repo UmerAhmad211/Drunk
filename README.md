@@ -11,4 +11,6 @@ zig build
 chmod +x run.sh
 ./run.sh
 ```
+## Note:
 
+This repository is archived now, so no nothing will be entertained.
