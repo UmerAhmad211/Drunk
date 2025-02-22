@@ -2,10 +2,10 @@
 #include <raylib.h>
 #include <cstddef>
 
-fndtion::fndtion() = default;
-fndtion::~fndtion() = default;
+Fndtion::Fndtion() = default;
+Fndtion::~Fndtion() = default;
 
-void fndtion::draw_fnd() {
+void Fndtion::draw_fnd() {
   for (size_t i = 0; i < FND_NO; ++i) {
     if (!fnd_four[i].empty()) {
       DrawTexture(fnd_four[i].back().cards, fnd_four[i].back().position.x,
@@ -14,7 +14,7 @@ void fndtion::draw_fnd() {
   }
 }
 
-void fndtion::update_fnd(cards_props cards) {
+void Fndtion::update_fnd(const Cards_Props& cards) {
   switch (cards.card_type[7]) {
     case 'h':
       fnd_four[0].push_back(cards);
@@ -31,7 +31,7 @@ void fndtion::update_fnd(cards_props cards) {
   }
 }
 
-bool fndtion::is_valid_move(cards_props card) {
+bool Fndtion::is_valid_move(const Cards_Props& card) {
   int suit_i;
   switch (card.card_type[7]) {
     case 'h':
@@ -54,7 +54,7 @@ bool fndtion::is_valid_move(cards_props card) {
   return card.card_num - fnd_four[suit_i].back().card_num == 1;
 }
 
-bool fndtion::is_win() {
+bool Fndtion::is_win() const {
   for (int i = 0; i < 4; ++i) {
     if (fnd_four[i].empty() || fnd_four[i].back().card_num != 13)
       return false;
@@ -62,7 +62,7 @@ bool fndtion::is_win() {
   return true;
 }
 
-void fndtion::unload_textures() {
+void Fndtion::unload_textures() const {
   for (size_t i = 0; i < FND_NO; ++i) {
     for (size_t j = 0; j < fnd_four[i].size(); ++j)
       UnloadTexture(fnd_four[i][j].cards);

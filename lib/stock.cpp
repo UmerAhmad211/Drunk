@@ -7,7 +7,7 @@
 #define CORD_Y 29
 #define S_SIZE 23
 
-stock::stock(init* cards_inst) : init_cards(cards_inst) {
+Stock::Stock(Init* cards_inst) : init_cards(cards_inst) {
   for (size_t i = 0; i <= S_SIZE; ++i)
     cards_stock.push(init_cards->deck[i]);
 
@@ -16,18 +16,18 @@ stock::stock(init* cards_inst) : init_cards(cards_inst) {
   dragging = false;
   click_s = LoadSound("assets/card_s.wav");
 }
-stock::~stock() {
+Stock::~Stock() {
   init_cards = nullptr;
 }
 
-void stock::draw_stock() {
+void Stock::draw_stock() {
   DrawTexture(init_cards->card_back, CORD_X, CORD_Y, WHITE);
   if (!waste.empty())
     DrawTexture(waste.top().cards, waste.top().position.x,
                 waste.top().position.y, WHITE);
 }
 
-void stock::stock_clicked(Vector2 mouse_pos, int& points) {
+void Stock::stock_clicked(Vector2 mouse_pos, int& points) {
   if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
     if ((CheckCollisionPointRec(
             mouse_pos, (Rectangle){CORD_X, CORD_Y, T_WIDTH, T_HEIGHT}))) {
@@ -36,7 +36,7 @@ void stock::stock_clicked(Vector2 mouse_pos, int& points) {
     }
   }
 }
-void stock::move_to_waste(int& points) {
+void Stock::move_to_waste(int& points) {
   if (!cards_stock.empty()) {
     auto top_card = deep_copy_card(cards_stock.top());
     cards_stock.pop();
@@ -50,7 +50,7 @@ void stock::move_to_waste(int& points) {
   }
 }
 
-void stock::restock() {
+void Stock::restock() {
   for (; !waste.empty();) {
     auto top_card = deep_copy_card(waste.top());
     waste.pop();
@@ -60,26 +60,26 @@ void stock::restock() {
   draw_stock();
 }
 
-void stock::waste_moved(Vector2 mouse_pos) {
+void Stock::waste_moved(Vector2 mouse_pos) {
   if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !waste.empty())
     collision_checker(mouse_pos, offset, old_pos, dragging, loc_change,
                       waste.top());
   else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && dragging &&
            !waste.empty() && !waste.top().is_captured) {
-    cards_props top_card;
+    Cards_Props top_card;
     set_old_pos(old_pos, dragging, loc_change, waste.top(), top_card, 0);
     waste.pop();
     waste.push(top_card);
   }
   if (dragging && !waste.empty() && !waste.top().is_captured) {
-    cards_props top_card;
+    Cards_Props top_card;
     update_pos(offset, waste.top(), top_card, 0);
     waste.pop();
     waste.push(top_card);
   }
 }
 
-void stock::move_cards_frm_sw(fndtion& n_fnd, int& points) {
+void Stock::move_cards_from_stock_to_waste(Fndtion& n_fnd, int& points) {
   if (dragging) {
     Rectangle card_rect = {waste.top().position.x, waste.top().position.y,
                            static_cast<float>(waste.top().cards.width),
@@ -101,9 +101,9 @@ void stock::move_cards_frm_sw(fndtion& n_fnd, int& points) {
   }
 }
 
-void stock::move_cards_frm_wt(tableau& n_tab, int& points) {
+void Stock::move_cards_from_waste_to_tableau(Tableau& n_tab, int& points) {
   if (dragging) {
-    bool yay = n_tab.card_moved_frm_waste(waste.top(), points);
+    bool yay = n_tab.card_moved_from_waste(waste.top(), points);
     if (yay) {
       waste.pop();
       dragging = false;
@@ -112,7 +112,7 @@ void stock::move_cards_frm_wt(tableau& n_tab, int& points) {
   }
 }
 
-void stock::unload_textures() {
+void Stock::unload_textures() {
   for (; !cards_stock.empty();) {
     UnloadTexture(cards_stock.top().cards);
     cards_stock.pop();

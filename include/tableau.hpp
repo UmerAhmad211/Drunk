@@ -9,9 +9,9 @@
 
 #define COL_NUM 7
 
-class tableau {
-  init* cards;
-  std::vector<cards_props> tableau_seven[COL_NUM];
+class Tableau {
+  Init* cards;
+  std::vector<Cards_Props> tableau_seven[COL_NUM];
   bool loc_change;
   bool dragging;
   size_t i_x = 0;
@@ -25,7 +25,7 @@ class tableau {
   }
 
   void move_card(const Rectangle& to_tab,
-                 cards_props& card,
+                 Cards_Props& card,
                  size_t k,
                  const bool& add_y) {
     card.position.x = to_tab.x;
@@ -46,17 +46,17 @@ class tableau {
   }
 
  public:
-  tableau(init*);
-  ~tableau();
+  Tableau(Init*);
+  ~Tableau();
   void unload_textures();
   void draw_tableau();
   void tableau_init();
   void update_tableau();
   void tableau_move(Vector2);
-  void move_cards_frm_tab(fndtion&, int&);
-  void move_cards_frm_tab_tab(int&);
-  bool check_valid_tab(cards_props, cards_props);
-  bool card_moved_frm_waste(cards_props&, int&);
+  void move_cards_from_tab(Fndtion&, int&);
+  void move_cards_from_tab_to_tab(int&);
+  bool check_valid_tab(Cards_Props, Cards_Props);
+  bool card_moved_from_waste(Cards_Props&, int&);
 };
 
 #endif

@@ -1,15 +1,14 @@
 # Solitaire
 
-## To play:
+## Prerequisites:
 
-```bash
-git clone https://github.com/UmerAhmad211/Solitaire.git
-cd Solitaire/
-make
-./game
+Must have ```zig``` version ```0.13.0``` and ```raylib``` installed.
+
+## Building and running:
+
 ```
-## Note:
-    This game should not be considered optimized in any way or form. While some parts are well written, others were deliberately overlooked due to an approaching deadline.
+zig build
+chmod +x run.sh
+./run.sh
+```
 
-## Dependencies:
-            Refer to the Makefile. 

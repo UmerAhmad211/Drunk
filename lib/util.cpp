@@ -1,14 +1,14 @@
 #include "../include/util.hpp"
 
-cards_props deep_copy_card(const cards_props& orig) {
-  cards_props copy = orig;
+Cards_Props deep_copy_card(const Cards_Props& orig) {
+  Cards_Props copy = orig;
   Image img = LoadImageFromTexture(orig.cards);
   copy.cards = LoadTextureFromImage(img);
   UnloadImage(img);
   return copy;
 }
 
-Rectangle set_rect(const std::string& card_type, const fndtion& n_fnd) {
+Rectangle set_rect(const std::string& card_type, const Fndtion& n_fnd) {
   switch (card_type[7]) {
     case 'h':
       return n_fnd.fnd_rec1;
@@ -26,7 +26,7 @@ bool collision_checker(const Vector2& mouse_pos,
                        Vector2& old_pos,
                        bool& dragging,
                        bool& loc_change,
-                       const cards_props& card) {
+                       const Cards_Props& card) {
   Rectangle card_rect = {card.position.x, card.position.y,
                          static_cast<float>(card.cards.width),
                          static_cast<float>(card.cards.height)};
@@ -47,8 +47,8 @@ bool collision_checker(const Vector2& mouse_pos,
 void set_old_pos(Vector2& old_pos,
                  bool& dragging,
                  bool& loc_change,
-                 const cards_props& card,
-                 cards_props& top_card,
+                 const Cards_Props& card,
+                 Cards_Props& top_card,
                  int y) {
   top_card = deep_copy_card(card);
   top_card.position.x = old_pos.x;
@@ -58,8 +58,8 @@ void set_old_pos(Vector2& old_pos,
 }
 
 void update_pos(const Vector2& offset,
-                const cards_props& card,
-                cards_props& top_card,
+                const Cards_Props& card,
+                Cards_Props& top_card,
                 int y) {
   Vector2 nmouse_pos = GetMousePosition();
   top_card = deep_copy_card(card);

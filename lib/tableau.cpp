@@ -5,15 +5,15 @@
 #include "../include/init.hpp"
 #include "../include/util.hpp"
 
-tableau::tableau(init* card_inst) : cards(card_inst) {
+Tableau::Tableau(Init* card_inst) : cards(card_inst) {
   loc_change = true;
   dragging = false;
 }
-tableau::~tableau() {
+Tableau::~Tableau() {
   cards = nullptr;
 };
 
-void tableau::draw_tableau() {
+void Tableau::draw_tableau() {
   for (size_t i = 0; i < COL_NUM; ++i) {
     for (size_t j = 0; j < tableau_seven[i].size(); ++j) {
       if (tableau_seven[i][j].isnt_hidden && !tableau_seven[i].empty())
@@ -29,7 +29,7 @@ void tableau::draw_tableau() {
   }
 }
 
-void tableau::tableau_init() {
+void Tableau::tableau_init() {
   int j = 0;
   for (size_t i = 24; i < CARDS_NO; ++i) {
     tableau_seven[j].push_back(cards->deck[i]);
@@ -40,7 +40,7 @@ void tableau::tableau_init() {
   card_flip = LoadSound("assets/card_s.wav");
 }
 
-void tableau::tableau_move(Vector2 mouse_pos) {
+void Tableau::tableau_move(Vector2 mouse_pos) {
   bool ret_w = false;
   if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
     for (size_t i = 0; i < COL_NUM; ++i) {
@@ -62,7 +62,7 @@ void tableau::tableau_move(Vector2 mouse_pos) {
       }
     }
   } else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && dragging) {
-    cards_props top_card;
+    Cards_Props top_card;
     int y = 0;
     for (size_t i = 0; i < s_size_cards; ++i) {
       set_old_pos(old_pos, dragging, loc_change, tableau_seven[i_x][i_y + i],
@@ -74,7 +74,7 @@ void tableau::tableau_move(Vector2 mouse_pos) {
   }
   if (dragging && i_x >= 0 && i_x < COL_NUM && i_y >= 0 &&
       i_y < tableau_seven[i_x].size()) {
-    cards_props top_card;
+    Cards_Props top_card;
     int y = 0;
     for (size_t i = 0; i < s_size_cards; ++i) {
       update_pos(offset, tableau_seven[i_x][i_y + i], top_card, y);
@@ -84,7 +84,7 @@ void tableau::tableau_move(Vector2 mouse_pos) {
   }
 }
 
-void tableau::move_cards_frm_tab(fndtion& n_fnd, int& points) {
+void Tableau::move_cards_from_tab(Fndtion& n_fnd, int& points) {
   if (dragging) {
     Rectangle card_rect = {
         tableau_seven[i_x][i_y].position.x, tableau_seven[i_x][i_y].position.y,
@@ -107,7 +107,7 @@ void tableau::move_cards_frm_tab(fndtion& n_fnd, int& points) {
   }
 }
 
-bool tableau::check_valid_tab(cards_props frm_tab, cards_props to_tab) {
+bool Tableau::check_valid_tab(Cards_Props frm_tab, Cards_Props to_tab) {
   if ((to_tab.card_num - frm_tab.card_num == 1) &&
       frm_tab.colour != to_tab.colour && !frm_tab.is_captured &&
       frm_tab.isnt_hidden && to_tab.isnt_hidden && to_tab.is_top)
@@ -115,7 +115,7 @@ bool tableau::check_valid_tab(cards_props frm_tab, cards_props to_tab) {
   return false;
 }
 
-void tableau::move_cards_frm_tab_tab(int& points) {
+void Tableau::move_cards_from_tab_to_tab(int& points) {
   if (dragging) {
     Rectangle card_rect = {
         tableau_seven[i_x][i_y].position.x, tableau_seven[i_x][i_y].position.y,
@@ -149,7 +149,7 @@ void tableau::move_cards_frm_tab_tab(int& points) {
   }
 }
 
-bool tableau::card_moved_frm_waste(cards_props& card_w, int& points) {
+bool Tableau::card_moved_from_waste(Cards_Props& card_w, int& points) {
   Rectangle card_rect = {card_w.position.x, card_w.position.y,
                          static_cast<float>(card_w.cards.width),
                          static_cast<float>(card_w.cards.height)};
@@ -184,7 +184,7 @@ bool tableau::card_moved_frm_waste(cards_props& card_w, int& points) {
   return false;
 }
 
-void tableau::unload_textures() {
+void Tableau::unload_textures() {
   for (size_t i = 0; i < COL_NUM; ++i) {
     for (size_t j = 0; j < tableau_seven[i].size(); ++j)
       UnloadTexture(tableau_seven[i][j].cards);

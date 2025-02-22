@@ -6,12 +6,12 @@
 #include <string>
 #include <utility>
 
-init::init() {
+Init::Init() {
   card_back = LoadTexture("assets/card_back.png");
 }
-init::~init() {}
+Init::~Init() {}
 
-void init::load_textures() {
+void Init::load_textures() {
   const std::vector<std::string> card_base = {"assets/heart", "assets/diams",
                                               "assets/clubs", "assets/spade"};
   const std::vector<std::string> card_values = {"01", "02", "03", "04", "05",
@@ -34,7 +34,7 @@ void init::load_textures() {
   }
 }
 
-void init::shuffle_cards() {
+void Init::shuffle_cards() {
   srand(time(0));
   for (size_t i = 0; i < CARDS_NO; ++i) {
     int rand1 = rand() % 52;
@@ -45,7 +45,7 @@ void init::shuffle_cards() {
   }
 }
 
-void init::init_cards_state() {
+void Init::init_cards_state() {
   int x = 150, spacing = 160, y = 258;
 
   for (size_t i = 24; i < CARDS_NO; ++i) {
