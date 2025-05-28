@@ -7,26 +7,22 @@
 #include "init.hpp"
 #include "raylib.h"
 
-Cards_Props deep_copy_card(const Cards_Props&);
-Rectangle set_rect(const std::string&, const Fndtion&);
+Cards_Props
+deep_copy_card(const Cards_Props &);
 
-bool collision_checker(const Vector2&,
-                       Vector2&,
-                       Vector2&,
-                       bool&,
-                       bool&,
-                       const Cards_Props&);
+Rectangle
+set_rect(const std::string &, const Fndtion &);
 
-void set_old_pos(Vector2&,
-                 bool&,
-                 bool&,
-                 const Cards_Props&,
-                 Cards_Props& top_card,
-                 int y);
+bool
+collision_checker(const Vector2 &, Vector2 &, Vector2 &, bool &, bool &,
+		  const Cards_Props &);
 
-void update_pos(const Vector2& offset,
-                const Cards_Props& card,
-                Cards_Props& top_card,
-                int y);
+void
+set_old_pos(Vector2 &, bool &, bool &, const Cards_Props &,
+	    Cards_Props &top_card, int y);
 
-#endif  // !UTIL_HPP
+void
+update_pos(const Vector2 &offset, const Cards_Props &card,
+	   Cards_Props &top_card, int y);
+
+#endif // !UTIL_HPP
