@@ -19,10 +19,10 @@ const cxx_flags = [_][]const u8{
 pub fn build(b: *std.Build) void {
     const exe = b.addExecutable(.{
         .name = "game",
-        .target = b.host,
+        .target = b.graph.host,
         .optimize = .ReleaseSmall,
         .strip = true,
-        .unwind_tables = false,
+        .unwind_tables = .none,
     });
     exe.addCSourceFiles(.{ .files = &cxx_src_files, .flags = &cxx_flags });
     exe.linkSystemLibrary("raylib");
