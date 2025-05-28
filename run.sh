@@ -2,3 +2,4 @@
 
 cp zig-out/bin/game .
 ./game
+rm ./game
